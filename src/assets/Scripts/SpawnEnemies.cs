@@ -9,7 +9,7 @@ public class SpawnEnemies : MonoBehaviour {
 	public GameObject[] enemies;  // Array of enemy prefabs.
 	
 	void Start (){
-		if(GameController.character == "Jaguar-Wong-is-Dead"){
+		if((GameController.Character?.Name ?? "") == "Jaguar-Wong-is-Dead"){
 			minTime = 1f;
 			maxTime = 2f;
 		}
@@ -17,8 +17,6 @@ public class SpawnEnemies : MonoBehaviour {
 	
 	IEnumerator SpawnObject(int index, float seconds)
 	{
-//		Debug.Log ("Waiting for " + seconds + " seconds");
-		
 		yield return new WaitForSeconds(seconds);
 		Instantiate(enemies[index], transform.position, transform.rotation);
 		

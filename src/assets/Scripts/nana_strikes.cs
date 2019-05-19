@@ -8,7 +8,7 @@ public class nana_strikes : MonoBehaviour {
 
 	void Start () {
 		truman = truman.GetComponent<Image>();
-		if("nana_strikes".Equals(GameController.character)){
+		if("nana_strikes".Equals(GameController.Character)){
 			truman.enabled = true;
 		}
 		else

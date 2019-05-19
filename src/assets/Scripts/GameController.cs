@@ -4,10 +4,9 @@ using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
-
-    public static bool isDead;
-    public static string character;
-    public static int score = 0;
+    public static Character Character;
+    public static bool IsDead;
+    public static int Score = 0;
     public AudioClip MenuMusic;
     public AudioClip GameMusic;
 
@@ -46,11 +45,5 @@ public class GameController : MonoBehaviour
         {
             _music.mute = !_music.mute;
         }
-    }
-
-    public void SetName(string name)
-    {
-        Debug.Log($"Name set to: {name}");
-        character = name;
     }
 }

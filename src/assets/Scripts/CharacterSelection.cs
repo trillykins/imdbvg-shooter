@@ -9,7 +9,6 @@ using System;
 public class CharacterSelection : MonoBehaviour
 {
     private int index;
-    private GameController gameController;
 
     public List<Character> Characters;
     public Canvas SelectionMenu;
@@ -19,11 +18,8 @@ public class CharacterSelection : MonoBehaviour
     public Button StartButton;
     public Image Prohibited;
 
-    private Character CurrentCharacter;
-
     void Start()
     {
-        gameController = FindObjectOfType<GameController>();
         SelectionMenu = SelectionMenu.GetComponent<Canvas>();
 
         index = UnityEngine.Random.Range(0, Characters.Count());
@@ -54,7 +50,8 @@ public class CharacterSelection : MonoBehaviour
 
     public void StartLevel() //this function will be used on our Play button
     {
-        gameController.SetName(CharacterName.text);
+        GameController.Character = Characters[index];
+        //gameController.SetName(CharacterName.text);
         SceneManager.LoadScene(2);
     }
 }

@@ -19,7 +19,7 @@ public class WeaponManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(!GameController.isDead){
+		if(!GameController.IsDead){
 			switch(currentWeaponName){
 			case "Gun": 
 				if(Input.GetButtonDown("Fire1")){
@@ -67,7 +67,7 @@ public class WeaponManager : MonoBehaviour {
 	
 	void OnTriggerEnter2D(Collider2D col){
 		if("Crate".Equals(col.transform.tag)){
-			GameController.score++;
+			GameController.Score++;
 			int bla = Random.Range(0, weapons.Length);
 			GetComponent<SpriteRenderer>().sprite = weapons[bla];
 			currentWeaponName = weapons[bla].name;	

@@ -12,6 +12,6 @@ public class CenterText : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		text.text = "" + GameController.score;	
+		text.text = "" + GameController.Score;	
 	}
 }

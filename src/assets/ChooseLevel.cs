@@ -1,20 +1,23 @@
 ﻿using UnityEngine;
+using System.Linq;
 using System.Collections;
 
-public class ChooseLevel : MonoBehaviour {
+public class ChooseLevel : MonoBehaviour
+{
+    public GameObject[] levels;
 
-	public GameObject[] levels;
+    void Awake()
+    {
+        Instantiate(levels[Random.Range(0, levels.Length)], transform.position, transform.rotation);
+    }
 
-	void Awake () {
-		Instantiate(levels[Random.Range(0, levels.Length)], transform.position, transform.rotation);	
-	}
-	
-	public void getNewLevel(){
-		GameObject[] gameObjects = GameObject.FindGameObjectsWithTag("Level");
-		foreach (var gameObject in gameObjects) {
-			Destroy(gameObject);
-		}
+    public void GetNewLevel()
+    {
+        foreach (var gameObject in GameObject.FindGameObjectsWithTag("Level"))
+        {
+            Destroy(gameObject);
+        }
 
-		Instantiate(levels[Random.Range(0, levels.Length)], transform.position, transform.rotation);	
-	}
+        Instantiate(levels[Random.Range(0, levels.Length)], transform.position, transform.rotation);
+    }
 }
