@@ -8,7 +8,7 @@ public class OGL : MonoBehaviour {
 
 	void Start () {
 		tint = tint.GetComponent<Image>();
-		if("OurGloriousLeader".Equals(GameController.character)){
+		if("OurGloriousLeader".Equals(GameController.Character)){
 			Color pik = tint.color;
 			pik.a = .2f;
 			tint.color = pik;
@@ -17,7 +17,7 @@ public class OGL : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if("OurGloriousLeader".Equals(GameController.character)){
+		if("OurGloriousLeader".Equals(GameController.Character)){
 			Color pik = tint.color;
 			pik = HSVToRGB(Mathf.PingPong(Time.time, 1f), 1, 1);
 			pik.a = .2f;

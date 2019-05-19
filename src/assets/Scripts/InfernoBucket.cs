@@ -7,7 +7,7 @@ public class InfernoBucket : MonoBehaviour {
 	
 	void Start () {
 		hat = GetComponent<SpriteRenderer>();
-		if("theinfernobucket".Equals(GameController.character))
+		if("theinfernobucket".Equals(GameController.Character))
 			hat.enabled = true;
 		else
 			hat.enabled = false;

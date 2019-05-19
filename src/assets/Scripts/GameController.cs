@@ -1,40 +1,49 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
-public class GameController : MonoBehaviour {
+public class GameController : MonoBehaviour
+{
+    public static Character Character;
+    public static bool IsDead;
+    public static int Score = 0;
+    public AudioClip MenuMusic;
+    public AudioClip GameMusic;
 
-	public static bool isDead;
-	public static string character;
-	public static int score = 0;
-	private AudioSource music;
-	public AudioClip menuMusic;	
-	public AudioClip gameMusic;	
-	private bool hasChanged = false;
-	
-	void Awake () {
-		DontDestroyOnLoad(transform.gameObject);
-	}
-	
-	void Start(){
-		music = GetComponent<AudioSource>();
-	}
-	
-	void Update(){
-		if(Application.loadedLevel == 2 && !hasChanged){
-			music.clip = gameMusic;
-			music.Play();
-			hasChanged = true;
-		}
-		if(Input.GetKeyDown(KeyCode.M)){
-			music.mute = !music.mute;
-		}
-	}
-	
-	public void setName(string name){
-		character = name;
-	}
-	
-	public string getName(){
-		return character;
-	}
+    private AudioSource _music;
+    private bool _hasChanged = false;
+
+    void Awake()
+    {
+        DontDestroyOnLoad(transform.gameObject);
+        _music = GetComponent<AudioSource>();
+    }
+
+    void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name.Equals("Level01") && !_hasChanged)
+        {
+            _music.clip = GameMusic;
+            _music.Play();
+            _hasChanged = true;
+        }
+    }
+
+    void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            _music.mute = !_music.mute;
+        }
+    }
 }
