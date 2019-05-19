@@ -3,13 +3,6 @@ using System.Collections;
 
 public class Bullet : MonoBehaviour
 {
-    void OnEnable()
-    {
-        //Debug.Log($"X: {transform.rotation.x}, Y: {transform.rotation.y}, Z: {transform.rotation.z}");
-    }
-
-
-
     void OnTriggerEnter2D(Collider2D col)
     {
         if (!"Player".Equals(col.tag))

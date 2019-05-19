@@ -38,7 +38,7 @@ public class WeaponManager : MonoBehaviour
                 case "Gun":
                     if (Input.GetButtonDown("Fire1"))
                     {
-                        var b = _bullets.Next(); //_bullets.AmmoIndex++;//[BulletIndex++];
+                        var b = _bullets.Next();
                         b.transform.SetPositionAndRotation(transform.position, transform.rotation);
                         b.transform.Rotate(0, 0, Random.Range(-3f, 4f));
                         b.SetActive(true);
@@ -49,7 +49,7 @@ public class WeaponManager : MonoBehaviour
                     _machinegunTimer -= Time.deltaTime;
                     if (Input.GetButton("Fire1") && _machinegunTimer <= 0)
                     {
-                        var b = _bullets.Next(); //_bullets[BulletIndex++];
+                        var b = _bullets.Next();
                         b.transform.SetPositionAndRotation(transform.position, transform.rotation);
                         b.transform.Rotate(0, 0, Random.Range(-3f, 4f));
                         _shot.Play();

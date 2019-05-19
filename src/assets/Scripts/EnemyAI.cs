@@ -3,7 +3,6 @@ using System.Collections;
 
 public class EnemyAI : MonoBehaviour
 {
-
     public int health = 15;
     public GameObject crate;
     private int direction = 1;
@@ -26,15 +25,15 @@ public class EnemyAI : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D col)
     {
-        if ("Wall".Equals(col.transform.tag) || "Enemy".Equals(col.transform.tag))
+        if (col.transform.tag.Equals("Wall") || col.transform.tag.Equals("Enemy"))
         {
             direction *= -1;
         }
-        if ("Grenade".Equals(col.transform.tag))
+        if (col.transform.tag.Equals("Grenade"))
         {
             health = 0;
         }
-        if ("Rocket".Equals(col.transform.tag))
+        if (col.transform.tag.Equals("Rocket"))
         {
             health = 0;
         }
