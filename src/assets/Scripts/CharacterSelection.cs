@@ -9,7 +9,7 @@ using System;
 public class CharacterSelection : MonoBehaviour
 {
     private int index;
-    private GameObject gameController;
+    private GameController gameController;
 
     public List<Character> Characters;
     public Canvas SelectionMenu;
@@ -17,12 +17,13 @@ public class CharacterSelection : MonoBehaviour
     public Text CharacterName;
     public Text CharacterDescription;
     public Button StartButton;
+    public Image Prohibited;
 
     private Character CurrentCharacter;
 
     void Start()
     {
-        gameController = GameObject.FindWithTag("GameController");
+        gameController = FindObjectOfType<GameController>();
         SelectionMenu = SelectionMenu.GetComponent<Canvas>();
 
         index = UnityEngine.Random.Range(0, Characters.Count());
@@ -38,7 +39,7 @@ public class CharacterSelection : MonoBehaviour
         CharacterDescription.text = Characters[index].Description.Replace("  Special", $".{Environment.NewLine}{Environment.NewLine}Special");
         CharacterName.text = Characters[index].Name;
         StartButton.enabled = CharacterName.text.ToLower() != "Knight_Artorias".ToLower();
-        Debug.Log($"Character selection: {index}");
+        Prohibited.enabled = !StartButton.enabled;
     }
 
     public void LeftArrowPress() //this function will be used on our Exit button
@@ -53,7 +54,7 @@ public class CharacterSelection : MonoBehaviour
 
     public void StartLevel() //this function will be used on our Play button
     {
-        gameController.SendMessage("SetName", CharacterName.text);
+        gameController.SetName(CharacterName.text);
         SceneManager.LoadScene(2);
     }
 }

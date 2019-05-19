@@ -50,6 +50,7 @@ public class GameController : MonoBehaviour
 
     public void SetName(string name)
     {
+        Debug.Log($"Name set to: {name}");
         character = name;
     }
 }
