@@ -6,14 +6,16 @@ public class ChooseLevel : MonoBehaviour {
 	public GameObject[] levels;
 
 	void Awake () {
+        Debug.Log("Hattefar");
 		Instantiate(levels[Random.Range(0, levels.Length)], transform.position, transform.rotation);	
 	}
 	
 	public void getNewLevel(){
-		GameObject[] pik = GameObject.FindGameObjectsWithTag("Level");
-		for(int i = 0; i < pik.Length; i++)
-			Destroy(pik[i]);
-		
+		GameObject[] gameObjects = GameObject.FindGameObjectsWithTag("Level");
+		foreach (var gameObject in gameObjects) {
+			Destroy(gameObject);
+		}
+
 		Instantiate(levels[Random.Range(0, levels.Length)], transform.position, transform.rotation);	
 	}
 }
