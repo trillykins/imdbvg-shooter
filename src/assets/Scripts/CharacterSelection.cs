@@ -8,49 +8,47 @@ using System;
 
 public class CharacterSelection : MonoBehaviour
 {
-    private int characterIndex;
+    private int index;
     private GameObject gameController;
 
     public List<Character> Characters;
-
-    //public Sprite[] avatars;
-    //public string[] charactersDescription;
-    //public string[] charactersName;
-
     public Canvas SelectionMenu;
     public Image Avatar;
     public Text CharacterName;
     public Text CharacterDescription;
     public Button StartButton;
 
+    private Character CurrentCharacter;
+
     void Start()
     {
         gameController = GameObject.FindWithTag("GameController");
         SelectionMenu = SelectionMenu.GetComponent<Canvas>();
 
-        characterIndex = UnityEngine.Random.Range(0, Characters.Count());
+        index = UnityEngine.Random.Range(0, Characters.Count());
         SetCurrentAvatar();
     }
 
-    private void SetCurrentAvatar()
+    private void SetCurrentAvatar(int i = 0)
     {
-        var index = Mathf.Abs(characterIndex);
+        index += i;
+        if (index >= Characters.Count()) index = 0;
+        if (index < 0) index = Characters.Count() - 1;
         Avatar.sprite = Characters[index].Avatar;
         CharacterDescription.text = Characters[index].Description.Replace("  Special", $".{Environment.NewLine}{Environment.NewLine}Special");
         CharacterName.text = Characters[index].Name;
         StartButton.enabled = CharacterName.text.ToLower() != "Knight_Artorias".ToLower();
+        Debug.Log($"Character selection: {index}");
     }
 
     public void LeftArrowPress() //this function will be used on our Exit button
     {
-        characterIndex = (characterIndex + 1) % Characters.Count();
-        SetCurrentAvatar();
+        SetCurrentAvatar(-1);
     }
 
     public void RightArrowPress() //this function will be used for our "NO" button in our Quit Menu
     {
-        characterIndex = (characterIndex - 1) % Characters.Count();
-        SetCurrentAvatar();
+        SetCurrentAvatar(1);
     }
 
     public void StartLevel() //this function will be used on our Play button

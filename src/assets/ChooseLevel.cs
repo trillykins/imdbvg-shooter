@@ -6,7 +6,6 @@ public class ChooseLevel : MonoBehaviour {
 	public GameObject[] levels;
 
 	void Awake () {
-        Debug.Log("Hattefar");
 		Instantiate(levels[Random.Range(0, levels.Length)], transform.position, transform.rotation);	
 	}
 	
