@@ -9,9 +9,11 @@ public class Grenadelauncher : MonoBehaviour {
 	private AudioSource boom;
 	public AudioClip pik;
 	private float timer = 2f;
-	
-	void Awake(){
-		boom = GetComponent<AudioSource>();			
+
+    private ProtagonistControls _player;
+
+    void Awake(){
+        boom = GetComponent<AudioSource>();			
 		if(GameObject.FindWithTag("Player").transform.localScale.x < 0)
 			direction = -1f;
 		else
@@ -19,7 +21,8 @@ public class Grenadelauncher : MonoBehaviour {
 	}
 	
 	void Start () {
-		rigid = GetComponent<Rigidbody2D>();
+        _player = FindObjectOfType<ProtagonistControls>();
+        rigid = GetComponent<Rigidbody2D>();
 		rigid.AddForce(Vector2.up * 450f);
 		if(direction < 0)
 			rigid.AddForce(Vector2.right * 500f);
@@ -38,7 +41,8 @@ public class Grenadelauncher : MonoBehaviour {
 					if("Enemy".Equals(colliders[i].tag) || "Crate".Equals(colliders[i].tag))
 						Destroy(colliders[i].gameObject);
 					if("Player".Equals(colliders[i].tag)){
-						GameObject.FindWithTag("Player").SendMessage("Death");
+                        _player.Death();
+						//GameObject.FindWithTag("Player").SendMessage("Death");
 					}
 				}
 			}
@@ -60,7 +64,8 @@ public class Grenadelauncher : MonoBehaviour {
 					if("Crate".Equals(colliders[i].tag))
 						Destroy (colliders[i].gameObject);	
 					if("Player".Equals(colliders[i].tag)){
-						GameObject.FindWithTag("Player").SendMessage("Death");
+                        _player.Death();
+						//GameObject.FindWithTag("Player").SendMessage("Death");
 					}
 				}
 			}

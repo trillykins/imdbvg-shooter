@@ -110,7 +110,7 @@ public class ProtagonistControls : MonoBehaviour
                 _grounded = true;
                 break;
             case "Enemy":
-                Destroy(col.gameObject);
+                col.gameObject.SetActive(false);
                 Death();
                 break;
         }
@@ -131,13 +131,15 @@ public class ProtagonistControls : MonoBehaviour
         {
             for (int i = 0; i < colliders.Length; i++)
             {
-                if ("Enemy".Equals(colliders[i].tag) || "Crate".Equals(colliders[i].tag))
-                    Destroy(colliders[i].gameObject);
+                if (colliders[i].tag.Equals("Enemy") || colliders[i].tag.Equals("Crate"))
+                {
+                    colliders[i].gameObject.SetActive(false);
+                }
             }
         }
     }
 
-    void Death()
+    public void Death()
     {
         GetComponent<Rigidbody2D>().AddForce(Vector2.up * 800f);
         GetComponent<Rigidbody2D>().AddForce(Vector2.right * 120f);
@@ -152,8 +154,8 @@ public class ProtagonistControls : MonoBehaviour
     {
         GameController.Score = 0;
         transform.position = Respawn.position;
-        GameObject.FindGameObjectsWithTag("Enemy").ToList().ForEach(x => Destroy(x));
-        GameObject.FindGameObjectsWithTag("Crate").ToList().ForEach(x => Destroy(x));
+        GameObject.FindGameObjectsWithTag("Enemy").ToList().ForEach(x => x.SetActive(false));
+        GameObject.FindGameObjectsWithTag("Crate").ToList().ForEach(x => x.SetActive(false));
         GetComponent<Collider2D>().isTrigger = false;
         deathScreen.enabled = false;
         retry.enabled = false;

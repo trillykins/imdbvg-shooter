@@ -26,6 +26,13 @@ public class CharacterSelection : MonoBehaviour
         SetCurrentAvatar();
     }
 
+    void Update()
+    {
+        if (Input.GetKeyDown("right")) RightArrowPress();
+        else if (Input.GetKeyDown("left")) LeftArrowPress();
+        else if (Input.GetKeyDown("return")) StartLevel();
+    }
+
     private void SetCurrentAvatar(int i = 0)
     {
         index += i;

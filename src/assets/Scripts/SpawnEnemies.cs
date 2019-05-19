@@ -1,37 +1,53 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
-public class SpawnEnemies : MonoBehaviour {
+public class SpawnEnemies : MonoBehaviour
+{
+    bool isSpawning = false;
+    public float minTime = 5.0f;
+    public float maxTime = 15.0f;
+    public GameObject[] enemies;  // Array of enemy prefabs.
 
-	bool isSpawning = false;
-	public float minTime = 5.0f;
-	public float maxTime = 15.0f;
-	public GameObject[] enemies;  // Array of enemy prefabs.
-	
-	void Start (){
-		if((GameController.Character?.Name ?? "") == "Jaguar-Wong-is-Dead"){
-			minTime = 1f;
-			maxTime = 2f;
-		}
-	}
-	
-	IEnumerator SpawnObject(int index, float seconds)
-	{
-		yield return new WaitForSeconds(seconds);
-		Instantiate(enemies[index], transform.position, transform.rotation);
-		
-		//We've spawned, so now we could start another spawn     
-		isSpawning = false;
-	}
-	
-	void Update () 
-	{
-		//We only want to spawn one at a time, so make sure we're not already making that call
-		if(! isSpawning)
-		{
-			isSpawning = true; //Yep, we're going to spawn
-			int enemyIndex = Random.Range(0, enemies.Length);
-			StartCoroutine(SpawnObject(enemyIndex, Random.Range(minTime, maxTime)));
-		}
-	}
+    private readonly List<GameObject> _enemyPool = new List<GameObject>();
+    private int _enemyIndex = 0;
+
+    void Start()
+    {
+        for (int i = 0; i < 50; i++)
+        {
+            var enemy = Instantiate(enemies[Random.Range(0, enemies.Length)], transform.position, transform.rotation);
+            enemy.SetActive(false);
+            _enemyPool.Add(enemy);
+        }
+        if ((GameController.Character?.Name ?? "") == "Jaguar-Wong-is-Dead")
+        {
+            minTime = 1f;
+            maxTime = 2f;
+        }
+    }
+
+    IEnumerator SpawnObject(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        //Instantiate(enemies[index], transform.position, transform.rotation);
+        var enemy = _enemyPool[_enemyIndex++];
+        enemy.transform.SetPositionAndRotation(transform.position, transform.rotation);
+        enemy.SetActive(true);
+        if (_enemyIndex >= _enemyPool.Count()) _enemyIndex = 0;
+
+        //We've spawned, so now we could start another spawn     
+        isSpawning = false;
+    }
+
+    void Update()
+    {
+        //We only want to spawn one at a time, so make sure we're not already making that call
+        if (!isSpawning)
+        {
+            isSpawning = true;
+            StartCoroutine(SpawnObject(Random.Range(minTime, maxTime)));
+        }
+    }
 }
