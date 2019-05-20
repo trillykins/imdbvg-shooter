@@ -14,6 +14,7 @@ public class ProtagonistControls : MonoBehaviour
     public Button retry;
     public bool isDead = false;
 
+    private BackgroundSelection _backgroundSelection;
     private AudioSource boom;
     private Character character;
     private bool _grounded;
@@ -28,6 +29,7 @@ public class ProtagonistControls : MonoBehaviour
 
     void Start()
     {
+        _backgroundSelection = FindObjectOfType<BackgroundSelection>();
         deathScreen = deathScreen.GetComponent<Canvas>();
         retry = retry.GetComponent<Button>();
         deathScreen.enabled = false;
@@ -156,6 +158,7 @@ public class ProtagonistControls : MonoBehaviour
         transform.position = Respawn.position;
         GameObject.FindGameObjectsWithTag("Enemy").ToList().ForEach(x => x.SetActive(false));
         GameObject.FindGameObjectsWithTag("Crate").ToList().ForEach(x => x.SetActive(false));
+        _backgroundSelection.SwitchBackground();
         GetComponent<Collider2D>().isTrigger = false;
         deathScreen.enabled = false;
         retry.enabled = false;

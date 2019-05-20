@@ -29,11 +29,7 @@ public class EnemyAI : MonoBehaviour
         {
             direction *= -1;
         }
-        if (col.transform.tag.Equals("Grenade"))
-        {
-            health = 0;
-        }
-        if (col.transform.tag.Equals("Rocket"))
+        if (col.transform.tag.Equals("Grenade") || col.transform.tag.Equals("Rocket"))
         {
             health = 0;
         }

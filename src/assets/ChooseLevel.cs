@@ -6,7 +6,7 @@ using System.Collections.Generic;
 public class ChooseLevel : MonoBehaviour
 {
     public GameObject[] levels;
-    private List<GameObject> levelPool = new List<GameObject>();
+    private readonly List<GameObject> levelPool = new List<GameObject>();
 
     void Awake()
     {
