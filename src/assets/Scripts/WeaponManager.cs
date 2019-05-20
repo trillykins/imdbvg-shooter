@@ -24,7 +24,7 @@ public class WeaponManager : MonoBehaviour
         _grenades = new AmmoPooling(50, projectiles[(int)_projectileType.grenade]);
         _rockets = new AmmoPooling(50, projectiles[(int)_projectileType.rocket]);
 
-        currentWeaponName = weapons[1].name;
+        currentWeaponName = weapons[0].name;
         _shot = GetComponent<AudioSource>();
     }
 

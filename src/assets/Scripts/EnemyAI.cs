@@ -18,8 +18,9 @@ public class EnemyAI : MonoBehaviour
         }
         if (health <= 0)
         {
-            Instantiate(crate, transform.position, transform.rotation);
-            Destroy(gameObject);
+            //Instantiate(crate, transform.position, transform.rotation);
+            //Destroy(gameObject);
+            gameObject.SetActive(false);
         }
     }
 

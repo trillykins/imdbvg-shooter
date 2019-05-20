@@ -9,17 +9,22 @@ public class SpawnEnemies : MonoBehaviour
     public float minTime = 5.0f;
     public float maxTime = 15.0f;
     public GameObject[] enemies;  // Array of enemy prefabs.
+    public GameObject Crate;
 
     private readonly List<GameObject> _enemyPool = new List<GameObject>();
+    private readonly List<GameObject> _cratePool = new List<GameObject>();
     private int _enemyIndex = 0;
 
     void Start()
     {
         for (int i = 0; i < 50; i++)
         {
+            var crate = Instantiate(enemies[Random.Range(0, enemies.Length)], transform.position, transform.rotation);
             var enemy = Instantiate(enemies[Random.Range(0, enemies.Length)], transform.position, transform.rotation);
             enemy.SetActive(false);
+            crate.SetActive(false);
             _enemyPool.Add(enemy);
+            _cratePool.Add(crate);
         }
         if ((GameController.Character?.Name ?? "") == "Jaguar-Wong-is-Dead")
         {
