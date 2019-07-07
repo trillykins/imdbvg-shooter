@@ -2,25 +2,28 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 public class SpawnEnemies : MonoBehaviour
 {
-    bool isSpawning = false;
     public float minTime = 5.0f;
-    public float maxTime = 15.0f;
+    public float maxTime = 10.0f;
     public GameObject[] enemies;  // Array of enemy prefabs.
     public GameObject Crate;
 
-    private readonly List<GameObject> _enemyPool = new List<GameObject>();
-    private readonly List<GameObject> _cratePool = new List<GameObject>();
-    private int _enemyIndex = 0;
+    private static readonly List<GameObject> _enemyPool = new List<GameObject>();
+    private static readonly List<GameObject> _cratePool = new List<GameObject>();
+    private static int _crateIndex = 0;
+    private static int _enemyIndex = 0;
+
+    private DateTime timeOut;
 
     void Start()
     {
         for (int i = 0; i < 50; i++)
         {
-            var crate = Instantiate(enemies[Random.Range(0, enemies.Length)], transform.position, transform.rotation);
-            var enemy = Instantiate(enemies[Random.Range(0, enemies.Length)], transform.position, transform.rotation);
+            var crate = Instantiate(Crate, transform.position, transform.rotation);
+            var enemy = Instantiate(enemies[UnityEngine.Random.Range(0, enemies.Length)], transform.position, transform.rotation);
             enemy.SetActive(false);
             crate.SetActive(false);
             _enemyPool.Add(enemy);
@@ -36,23 +39,32 @@ public class SpawnEnemies : MonoBehaviour
     IEnumerator SpawnObject(float seconds)
     {
         yield return new WaitForSeconds(seconds);
-        //Instantiate(enemies[index], transform.position, transform.rotation);
-        var enemy = _enemyPool[_enemyIndex++];
-        enemy.transform.SetPositionAndRotation(transform.position, transform.rotation);
-        enemy.SetActive(true);
-        if (_enemyIndex >= _enemyPool.Count()) _enemyIndex = 0;
-
-        //We've spawned, so now we could start another spawn     
-        isSpawning = false;
+        SpawnObject(_enemyPool, ref _enemyIndex, transform);
     }
 
     void Update()
     {
         //We only want to spawn one at a time, so make sure we're not already making that call
-        if (!isSpawning)
+        if (timeOut < DateTime.UtcNow)
         {
-            isSpawning = true;
-            StartCoroutine(SpawnObject(Random.Range(minTime, maxTime)));
+            var cooldown = UnityEngine.Random.Range(minTime, maxTime);
+            timeOut = DateTime.UtcNow.AddSeconds(cooldown);
+            StartCoroutine(SpawnObject(cooldown));
         }
+    }
+
+    private static void SpawnObject(List<GameObject> gameObjects, ref int index, Transform transform)
+    {
+        Debug.Log($"Index: {index}");
+        var o = gameObjects[index++];
+        o.transform.SetPositionAndRotation(transform.position, transform.rotation);
+        o.SetActive(true);
+        if (index >= gameObjects.Count()) index = 0;
+    }
+
+    public static void SpawnCrate(Transform transform)
+    {
+        Debug.Log("Spawning crate!");
+        SpawnObject(_cratePool, ref _crateIndex, transform);
     }
 }

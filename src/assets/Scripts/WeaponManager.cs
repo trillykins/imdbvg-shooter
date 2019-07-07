@@ -16,13 +16,13 @@ public class WeaponManager : MonoBehaviour
     private AmmoPooling _grenades;
     private AmmoPooling _rockets;
 
-    private enum _projectileType { bullet, rocket, grenade }
+    private enum ProjectileType { bullet, rocket, grenade }
 
     void Start()
     {
-        _bullets = new AmmoPooling(50, projectiles[(int)_projectileType.bullet]);
-        _grenades = new AmmoPooling(50, projectiles[(int)_projectileType.grenade]);
-        _rockets = new AmmoPooling(50, projectiles[(int)_projectileType.rocket]);
+        _bullets = new AmmoPooling(50, projectiles[(int)ProjectileType.bullet]);
+        _grenades = new AmmoPooling(50, projectiles[(int)ProjectileType.grenade]);
+        _rockets = new AmmoPooling(50, projectiles[(int)ProjectileType.rocket]);
 
         currentWeaponName = weapons[0].name;
         _shot = GetComponent<AudioSource>();
