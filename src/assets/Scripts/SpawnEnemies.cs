@@ -55,7 +55,6 @@ public class SpawnEnemies : MonoBehaviour
 
     private static void SpawnObject(List<GameObject> gameObjects, ref int index, Transform transform)
     {
-        Debug.Log($"Index: {index}");
         var o = gameObjects[index++];
         o.transform.SetPositionAndRotation(transform.position, transform.rotation);
         o.SetActive(true);

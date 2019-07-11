@@ -24,7 +24,7 @@ public class WeaponManager : MonoBehaviour
         _grenades = new AmmoPooling(50, projectiles[(int)ProjectileType.grenade]);
         _rockets = new AmmoPooling(50, projectiles[(int)ProjectileType.rocket]);
 
-        currentWeaponName = weapons[0].name;
+        currentWeaponName = weapons[3].name;
         _shot = GetComponent<AudioSource>();
     }
 
@@ -62,6 +62,8 @@ public class WeaponManager : MonoBehaviour
                     {
                         var g = _grenades.Next();
                         g.transform.SetPositionAndRotation(transform.position, transform.rotation);
+                        g.transform.Rotate(0, 0, Random.Range(-3f, 4f));
+                        g.transform.SetPositionAndRotation(transform.position, transform.rotation);
                         g.SetActive(true);
                     }
 
@@ -70,6 +72,8 @@ public class WeaponManager : MonoBehaviour
                     if (Input.GetButtonDown("Fire1"))
                     {
                         var r = _rockets.Next();
+                        r.transform.SetPositionAndRotation(transform.position, transform.rotation);
+                        r.transform.Rotate(0, 0, Random.Range(-3f, 4f));
                         r.transform.SetPositionAndRotation(transform.position, transform.rotation);
                         r.SetActive(true);
                     }

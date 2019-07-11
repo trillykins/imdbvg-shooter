@@ -1,78 +1,100 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Grenadelauncher : MonoBehaviour {
-	
-	private Rigidbody2D rigid;
-	private float direction;
-	public GameObject explosion;
-	private AudioSource boom;
-	public AudioClip pik;
-	private float timer = 2f;
+public class Grenadelauncher : MonoBehaviour
+{
 
+    public AudioClip pik;
+    public GameObject explosion;
+
+    private Rigidbody2D rigid;
+    private float direction;
+    private AudioSource boom;
+    private float timer = 2f;
+    private float inactiveTimer = 1f;
+    private bool disabling;
+    private Renderer _renderer;
+    private Collider2D _collider;
+    private CameraShake _camera;
     private ProtagonistControls _player;
+    private GameObject _explosion;
 
-    void Awake(){
-        boom = GetComponent<AudioSource>();			
-		if(GameObject.FindWithTag("Player").transform.localScale.x < 0)
-			direction = -1f;
-		else
-			direction = 1f;
-	}
-	
-	void Start () {
+    void Awake()
+    {
+        _explosion = Instantiate(explosion, transform.position, transform.rotation);
+        _explosion.SetActive(false);
+        _camera = Camera.main.GetComponent<CameraShake>();
+        _collider = GetComponent<Collider2D>();
+        _renderer = GetComponent<Renderer>();
+        boom = GetComponent<AudioSource>();
         _player = FindObjectOfType<ProtagonistControls>();
         rigid = GetComponent<Rigidbody2D>();
-		rigid.AddForce(Vector2.up * 450f);
-		if(direction < 0)
-			rigid.AddForce(Vector2.right * 500f);
-		else if(direction > 0)
-			rigid.AddForce(Vector2.right * -500f);
-	}
-	
-	void Update(){
-		timer -= Time.deltaTime;
-		if (timer <= 0f && GetComponent<Collider2D>().enabled == true){
-			Instantiate(explosion, transform.position, transform.rotation);
-			boom.PlayOneShot(pik);
-			Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 1f);
-			if(colliders.Length > 0){
-				for(int i = 0; i < colliders.Length; i++){
-					if("Enemy".Equals(colliders[i].tag) || "Crate".Equals(colliders[i].tag))
-						Destroy(colliders[i].gameObject);
-					if("Player".Equals(colliders[i].tag)){
+    }
+
+    void OnEnable()
+    {
+        disabling = false;
+        timer = 2f;
+        inactiveTimer = 1f;
+        _renderer.enabled = true;
+        _collider.enabled = true;
+        direction = _player.transform.localScale.x;
+        rigid.AddForce(Vector2.up * 450f);
+        rigid.AddForce(Vector2.right * 500f * -Mathf.Sign(direction));
+    }
+
+    void Update()
+    {
+        timer -= Time.deltaTime;
+        if (timer <= 0f && _collider.enabled == true)
+        {
+            _explosion.SetActive(true);
+            _explosion.transform.SetPositionAndRotation(transform.position, transform.rotation);
+            boom.PlayOneShot(pik);
+            Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 1f);
+            if (colliders.Length > 0)
+            {
+                for (int i = 0; i < colliders.Length; i++)
+                {
+                    if (colliders[i].tag == "Enemy" || colliders[i].tag == "Crate")
+                        colliders[i].gameObject.SetActive(false);
+                    if (colliders[i].tag == "Player")
+                    {
                         _player.Death();
-						//GameObject.FindWithTag("Player").SendMessage("Death");
-					}
-				}
-			}
-			gameObject.GetComponent<Renderer>().enabled = false;	
-			GetComponent<Collider2D>().enabled = false;
-			Destroy(gameObject, 1f);
-		}
-	}
-	
-	void OnCollisionEnter2D(Collision2D col){
-		if("Enemy".Equals(col.transform.tag) || "Crate".Equals(col.transform.tag)){
-			Instantiate(explosion, transform.position, transform.rotation);
-			boom.PlayOneShot(pik);
-			Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 1f);
-			if(colliders.Length > 0){
-				for(int i = 0; i < colliders.Length; i++){
-					if("Enemy".Equals(colliders[i].tag))
-						colliders[i].gameObject.SendMessage("HitByGrenade");
-					if("Crate".Equals(colliders[i].tag))
-						Destroy (colliders[i].gameObject);	
-					if("Player".Equals(colliders[i].tag)){
-                        _player.Death();
-						//GameObject.FindWithTag("Player").SendMessage("Death");
-					}
-				}
-			}
-			gameObject.GetComponent<Renderer>().enabled = false;	
-			GetComponent<Collider2D>().enabled = false;
-			Camera.main.GetComponent<CameraShake> ().ShakeCamera (0.1f, 1f);
-			Destroy(gameObject, 1f);
-		}
-	}
+                    }
+                }
+            }
+            _renderer.enabled = false;
+            _collider.enabled = false;
+            _camera.ShakeCamera(0.1f, 1f);
+            disabling = true;
+        }
+        if (disabling) inactiveTimer -= Time.deltaTime;
+        if (inactiveTimer <= 0f) gameObject.SetActive(false);
+    }
+
+    void OnCollisionEnter2D(Collision2D col)
+    {
+        if (col.transform.tag == "Enemy" || col.transform.tag == "Crate")
+        {
+            Instantiate(explosion, transform.position, transform.rotation);
+            boom.PlayOneShot(pik);
+            Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, 1f);
+            if (colliders.Length > 0)
+            {
+                for (int i = 0; i < colliders.Length; i++)
+                {
+                    if (colliders[i].tag == "Enemy") colliders[i].gameObject.SendMessage("HitByGrenade");
+                    if (colliders[i].tag == "Crate") colliders[i].gameObject.SetActive(false);
+                    if (colliders[i].tag == "Player") _player.Death();
+                }
+            }
+            _renderer.enabled = false;
+            _collider.enabled = false;
+            _camera.ShakeCamera(0.1f, 1f);
+            disabling = true;
+        }
+        if (disabling) inactiveTimer -= Time.deltaTime;
+        if (inactiveTimer <= 0f) gameObject.SetActive(false);
+    }
 }
