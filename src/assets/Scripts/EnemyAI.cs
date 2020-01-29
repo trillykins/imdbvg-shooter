@@ -4,16 +4,16 @@ using System.Collections;
 public class EnemyAI : MonoBehaviour
 {
     public int health = 15;
-    public GameObject crate;
-    private int direction = 1;
+    //public GameObject crate;
+    private int _direction = 1;
 
     void Update()
     {
         if (transform.position.y < -5)
         {
-            if (direction > 0)
+            if (_direction > 0)
                 transform.position = new Vector2(-2.33f, 4.74f);
-            else if (direction < 0)
+            else if (_direction < 0)
                 transform.position = new Vector2(1.8f, 4.84f);
         }
         if (health <= 0)
@@ -25,11 +25,11 @@ public class EnemyAI : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D col)
     {
-        if (col.transform.tag.Equals("Wall") || col.transform.tag.Equals("Enemy"))
+        if (col.transform.CompareTag("Wall") || col.transform.CompareTag("Enemy"))
         {
-            direction *= -1;
+            _direction *= -1;
         }
-        if (col.transform.tag.Equals("Grenade") || col.transform.tag.Equals("Rocket"))
+        if (col.transform.CompareTag("Grenade") || col.transform.CompareTag("Rocket"))
         {
             health = 0;
         }
@@ -37,6 +37,7 @@ public class EnemyAI : MonoBehaviour
 
     void HitByGrenade()
     {
+        // Do curved jump?
         health = 0;
     }
 
@@ -51,7 +52,7 @@ public class EnemyAI : MonoBehaviour
 
     void FixedUpdate()
     {
-        transform.Translate(new Vector3(direction, 0, 0) * Time.deltaTime * 5f);
-        transform.localScale = new Vector3(5 * direction, 5, 1);
+        transform.Translate(new Vector3(_direction, 0, 0) * Time.fixedDeltaTime * 5f);
+        transform.localScale = new Vector3(5 * _direction, 5, 1);
     }
 }

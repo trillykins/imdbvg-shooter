@@ -56,9 +56,11 @@ public class Grenadelauncher : MonoBehaviour
             {
                 for (int i = 0; i < colliders.Length; i++)
                 {
-                    if (colliders[i].tag == "Enemy" || colliders[i].tag == "Crate")
+                    if (colliders[i].CompareTag("Enemy") || colliders[i].CompareTag("Crate"))
+                    {
                         colliders[i].gameObject.SetActive(false);
-                    if (colliders[i].tag == "Player")
+                    }
+                    if (colliders[i].CompareTag("Player"))
                     {
                         _player.Death();
                     }
@@ -75,7 +77,7 @@ public class Grenadelauncher : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D col)
     {
-        if (col.transform.tag == "Enemy" || col.transform.tag == "Crate")
+        if (col.transform.CompareTag("Enemy") || col.transform.CompareTag("Crate"))
         {
             Instantiate(explosion, transform.position, transform.rotation);
             boom.PlayOneShot(pik);
@@ -84,9 +86,12 @@ public class Grenadelauncher : MonoBehaviour
             {
                 for (int i = 0; i < colliders.Length; i++)
                 {
-                    if (colliders[i].tag == "Enemy") colliders[i].gameObject.SendMessage("HitByGrenade");
-                    if (colliders[i].tag == "Crate") colliders[i].gameObject.SetActive(false);
-                    if (colliders[i].tag == "Player") _player.Death();
+                    if (colliders[i].CompareTag("Enemy")) colliders[i].gameObject.SendMessage("HitByGrenade");
+                    if (colliders[i].CompareTag("Crate")) colliders[i].gameObject.SetActive(false);
+                    if (colliders[i].CompareTag("Player"))
+                    {
+                        _player.Death();
+                    }
                 }
             }
             _renderer.enabled = false;

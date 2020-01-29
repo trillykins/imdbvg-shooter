@@ -38,10 +38,7 @@ public class WeaponManager : MonoBehaviour
                 case "Gun":
                     if (Input.GetButtonDown("Fire1"))
                     {
-                        var b = _bullets.Next();
-                        b.transform.SetPositionAndRotation(transform.position, transform.rotation);
-                        b.transform.Rotate(0, 0, Random.Range(-3f, 4f));
-                        b.SetActive(true);
+                        SetAmmo(_bullets);
                         _shot.Play();
                     }
                     break;
@@ -49,33 +46,22 @@ public class WeaponManager : MonoBehaviour
                     _machinegunTimer -= Time.deltaTime;
                     if (Input.GetButton("Fire1") && _machinegunTimer <= 0)
                     {
-                        var b = _bullets.Next();
-                        b.transform.SetPositionAndRotation(transform.position, transform.rotation);
-                        b.transform.Rotate(0, 0, Random.Range(-3f, 4f));
+                        SetAmmo(_bullets);
                         _shot.Play();
-                        b.SetActive(true);
                         _machinegunTimer = .1f;
                     }
                     break;
                 case "Grenadelauncher":
                     if (Input.GetButtonDown("Fire1"))
                     {
-                        var g = _grenades.Next();
-                        g.transform.SetPositionAndRotation(transform.position, transform.rotation);
-                        g.transform.Rotate(0, 0, Random.Range(-3f, 4f));
-                        g.transform.SetPositionAndRotation(transform.position, transform.rotation);
-                        g.SetActive(true);
+                        SetAmmo(_grenades);
                     }
 
                     break;
                 case "Rocketlauncher":
                     if (Input.GetButtonDown("Fire1"))
                     {
-                        var r = _rockets.Next();
-                        r.transform.SetPositionAndRotation(transform.position, transform.rotation);
-                        r.transform.Rotate(0, 0, Random.Range(-3f, 4f));
-                        r.transform.SetPositionAndRotation(transform.position, transform.rotation);
-                        r.SetActive(true);
+                        SetAmmo(_rockets);
                     }
                     break;
                 case "Shotgun":
@@ -84,10 +70,7 @@ public class WeaponManager : MonoBehaviour
                     {
                         for (int i = 0; i < 5; i++)
                         {
-                            var b = _bullets.Next();
-                            b.transform.SetPositionAndRotation(transform.position, transform.rotation);
-                            b.transform.Rotate(0, 0, Random.Range(-3f, 4f));
-                            b.SetActive(true);
+                            SetAmmo(_bullets);
                         }
                         _shot.Play();
                         _machinegunTimer = .4f;
@@ -99,7 +82,7 @@ public class WeaponManager : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D col)
     {
-        if (col.transform.tag.Equals("Crate"))
+        if (col.transform.CompareTag("Crate"))
         {
             GameController.Score++;
             int bla = Random.Range(0, weapons.Length);
@@ -107,6 +90,14 @@ public class WeaponManager : MonoBehaviour
             currentWeaponName = weapons[bla].name;
             Destroy(col.gameObject);
         }
+    }
+
+    private void SetAmmo(AmmoPooling ammo)
+    {
+        var r = ammo.Next();
+        r.transform.SetPositionAndRotation(transform.position, transform.rotation);
+        r.transform.Rotate(0, 0, Random.Range(-3f, 4f));
+        r.SetActive(true);
     }
 }
 

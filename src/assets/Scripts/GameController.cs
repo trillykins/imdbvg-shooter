@@ -15,6 +15,7 @@ public class GameController : MonoBehaviour
 
     void Awake()
     {
+        Debug.Log("GameController awake!");
         DontDestroyOnLoad(transform.gameObject);
         _music = GetComponent<AudioSource>();
     }

@@ -15,6 +15,7 @@ public class BackgroundSelection : MonoBehaviour
         Debug.Log("Switching background!");
         _spriteRenderer.sprite = Backgrounds[Random.Range(0, Backgrounds.Length)];
         _spriteRenderer.color = _colours[Random.Range(0, Backgrounds.Length)];
+        Debug.Log(_spriteRenderer.color);
     }
 
     void Start()

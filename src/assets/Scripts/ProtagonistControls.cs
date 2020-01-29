@@ -66,7 +66,7 @@ public class ProtagonistControls : MonoBehaviour
                 _direction = 1;
             else
                 _direction = -1;
-            transform.Translate(new Vector3(_direction * ZukoVariable, 0, 0) * Time.deltaTime * movementSpeed);
+            transform.Translate(new Vector3(_direction * ZukoVariable, 0, 0) * Time.fixedDeltaTime * movementSpeed);
             transform.localScale = new Vector3(-5 * _direction * ZukoVariable, 5, 1);
         }
     }
@@ -133,7 +133,7 @@ public class ProtagonistControls : MonoBehaviour
         {
             for (int i = 0; i < colliders.Length; i++)
             {
-                if (colliders[i].tag.Equals("Enemy") || colliders[i].tag.Equals("Crate"))
+                if (colliders[i].CompareTag("Enemy") || colliders[i].CompareTag("Crate"))
                 {
                     colliders[i].gameObject.SetActive(false);
                 }

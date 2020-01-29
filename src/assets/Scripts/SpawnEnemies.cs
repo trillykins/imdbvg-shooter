@@ -6,13 +6,15 @@ using System;
 
 public class SpawnEnemies : MonoBehaviour
 {
-    public float minTime = 5.0f;
-    public float maxTime = 10.0f;
+    public float minTime = .1f;
+    public float maxTime = .6f;
     public GameObject[] enemies;  // Array of enemy prefabs.
+    public Transform[] spawnPoints;
     public GameObject Crate;
 
     private static readonly List<GameObject> _enemyPool = new List<GameObject>();
     private static readonly List<GameObject> _cratePool = new List<GameObject>();
+    private static Transform[] _spawnPoints;
     private static int _crateIndex = 0;
     private static int _enemyIndex = 0;
 
@@ -20,15 +22,18 @@ public class SpawnEnemies : MonoBehaviour
 
     void Start()
     {
+        UnityEngine.Random.InitState(DateTime.UtcNow.Millisecond);
+        Debug.Log($"{DateTime.UtcNow:s}: Instantiating enemies and crates!");
         for (int i = 0; i < 50; i++)
         {
-            var crate = Instantiate(Crate, transform.position, transform.rotation);
             var enemy = Instantiate(enemies[UnityEngine.Random.Range(0, enemies.Length)], transform.position, transform.rotation);
+            var crate = Instantiate(Crate, transform.position, transform.rotation);
             enemy.SetActive(false);
             crate.SetActive(false);
             _enemyPool.Add(enemy);
             _cratePool.Add(crate);
         }
+        _spawnPoints = spawnPoints.ToArray();
         if ((GameController.Character?.Name ?? "") == "Jaguar-Wong-is-Dead")
         {
             minTime = 1f;
@@ -39,7 +44,9 @@ public class SpawnEnemies : MonoBehaviour
     IEnumerator SpawnObject(float seconds)
     {
         yield return new WaitForSeconds(seconds);
-        SpawnObject(_enemyPool, ref _enemyIndex, transform);
+        var t = _spawnPoints[UnityEngine.Random.Range(0, _spawnPoints.Length)];
+        Debug.Log($"Spawn point: {t.position} '{t.rotation}'");
+        SpawnObject(_enemyPool, ref _enemyIndex, t);
     }
 
     void Update()
@@ -63,7 +70,6 @@ public class SpawnEnemies : MonoBehaviour
 
     public static void SpawnCrate(Transform transform)
     {
-        Debug.Log("Spawning crate!");
         SpawnObject(_cratePool, ref _crateIndex, transform);
     }
 }
